@@ -1,12 +1,12 @@
 package recognizer;
 
 /**
- * Created by 陈英硕 on 2015/3/16.
+ * Created by yingshuo chen on 2015/3/16.
  */
 
-import Model.MyFeature;
-import Model.MyPoint;
+import model.*;
 import graphic.*;
+import utils.MathUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -58,6 +58,25 @@ public class FeatureExtractor {
 
     }
 
+    public MySymbol PointToUnit(MyFeature mf) {
+
+        List<MyStroke> strokes = new ArrayList<MyStroke>();
+
+        for(int i = 0; i < noOfLines; i++) {
+
+            List<MyUnit> units = new ArrayList<MyUnit>();
+            for(int j = 0; j < order - 1; j++) {
+                MyPoint p = mf.feature.get(i).get(j);
+                MyPoint q = mf.feature.get(i).get(j+1);
+                units.add(new MyUnit(MathUtils.getAngle(p,q),MathUtils.getDistance(p,q)));
+            }
+            strokes.add(new MyStroke(mf.feature.get(i).get(0).x,mf.feature.get(i).get(0).y,units));
+        }
+
+        MySymbol ms = new MySymbol(strokes);
+        return ms;
+    }
+
     private void Interpolate(MyFeature mf) {
 
         double minX = 32767, minY = 32768, maxX = 0, maxY = 0;
@@ -105,6 +124,9 @@ public class FeatureExtractor {
                     tempP = new MyPoint(line.get(k));
                     k ++;
                 }
+            }
+            if(mf.feature.get(i).size()<order) {
+                mf.feature.get(i).add(new MyPoint(line.get(line.size()-1)));
             }
         }
 

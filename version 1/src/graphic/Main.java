@@ -1,11 +1,6 @@
 package graphic;
 
 import java.awt.Color;
-import java.awt.Container;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -31,7 +26,7 @@ public class Main {
 			myFrame.setLayout(null);
 			myFrame.setSize(1000, 700);
 			myFrame.setResizable(false);
-			Container c = myFrame.getContentPane();
+			//Container c = myFrame.getContentPane();
 
 			JButton clearButton = new JButton("clear");
 			clearButton.setBounds(5, 5, 100, 30);
@@ -57,6 +52,7 @@ public class Main {
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
 					//paintPanel.saveImage();
+					paintPanel.recognize();
 				}
 				
 			});
@@ -111,8 +107,7 @@ public class Main {
 
 			myFrame.setVisible(true);
 
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

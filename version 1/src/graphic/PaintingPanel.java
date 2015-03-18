@@ -13,6 +13,11 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import model.MyFeature;
+import model.MyPoint;
+import model.MySymbol;
+import recognizer.FeatureExtractor;
+
 public class PaintingPanel extends JPanel implements MouseListener,
 		MouseMotionListener {
 
@@ -191,4 +196,28 @@ public class PaintingPanel extends JPanel implements MouseListener,
 	// }
 	// }
 
+	public void recognize()
+	{
+		System.out.println(rectangles.get(0).width);
+		FeatureExtractor fe = new FeatureExtractor(rectangles.get(0));
+		MyFeature myFeature = fe.Extract();
+        MySymbol mySymbol = fe.PointToUnit(myFeature);
+		
+		// test
+		MyRect mrect = new MyRect();
+		for( ArrayList<MyPoint> stroke : myFeature.feature)
+		{
+			MyLine mline = new MyLine();
+			for(MyPoint point : stroke)
+			{
+				mline.addPoint((int)(point.x*200)+50, (int)(point.y*200)+50);
+			}
+			mrect.join(mline);
+		}
+        rectangles.add(mrect);
+		repaint();
+	}
+	
+	
+	
 }

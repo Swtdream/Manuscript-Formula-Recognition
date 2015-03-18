@@ -1,9 +1,9 @@
-package Model;
+package model;
 
-import java.awt.*;
+import java.awt.Point;
 
 /**
- * Created by 陈英硕 on 2015/3/16.
+ * Created by yingshuo chen on 2015/3/16.
  */
 public class MyPoint {
 

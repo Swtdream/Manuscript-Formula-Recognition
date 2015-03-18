@@ -17,6 +17,14 @@ public class MyRect {
 
 	public boolean isActive;
 
+	public MyRect()
+	{
+		lineList = new ArrayList<MyLine>();
+		lx = ly = Integer.MAX_VALUE;
+		rx = ry = Integer.MIN_VALUE;
+		this.isActive = true;
+	}
+	
 	public MyRect(MyLine line, boolean ia) {
 		lineList = new ArrayList<MyLine>();
 		lineList.add(line);
@@ -41,6 +49,17 @@ public class MyRect {
 		ly = Math.min(this.ly, another.ly);
 		rx = Math.max(this.rx, another.rx);
 		ry = Math.max(this.ry, another.ry);
+		width = rx - lx;
+		height = ry - ly;
+	}
+	
+	public void join(MyLine mline)
+	{
+		this.lineList.add(mline);
+		lx = Math.min(this.lx, mline.lt.x);
+		ly = Math.min(this.ly, mline.lt.y);
+		rx = Math.max(this.rx, mline.rb.x);
+		ry = Math.max(this.ry, mline.rb.y);
 		width = rx - lx;
 		height = ry - ly;
 	}
