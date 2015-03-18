@@ -93,6 +93,7 @@ public class Main {
 					int numStroke = symbols.get(0).getStrokes().size();
 					int v = Integer.valueOf(numField.getText());
 					IOUtils.objectToJsonFile(v, numStroke, symbols);
+					symbols.clear();
 				}
 				
 			});
@@ -127,8 +128,7 @@ public class Main {
 
 			myFrame.setVisible(true);
 
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
