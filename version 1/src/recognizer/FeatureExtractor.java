@@ -79,7 +79,7 @@ public class FeatureExtractor {
 
     private void Interpolate(MyFeature mf) {
 
-        double minX = 32767, minY = 32768, maxX = 0, maxY = 0;
+        double minX = 32768, minY = 32768, maxX = 0, maxY = 0;
 
         for(int i = 0; i < noOfLines; i ++) {
 
@@ -100,6 +100,12 @@ public class FeatureExtractor {
             int k;
             MyPoint tempP = new MyPoint(line.get(0));
             mf.feature.get(i).add(new MyPoint(tempP));
+
+            maxX = (tempP.x>maxX?tempP.x:maxX);
+            minX = (tempP.x<minX?tempP.x:minX);
+            maxY = (tempP.y>maxY?tempP.y:maxY);
+            minY = (tempP.y<minY?tempP.y:minY);
+            
             for(k = 1; !distance.isEmpty();) {
 
                 double tempDis = distance.getFirst();
