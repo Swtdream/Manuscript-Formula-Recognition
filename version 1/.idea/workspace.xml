@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c5fb3b78-eb12-4525-82e3-955df4564476" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/recognizer/FeatureExtractor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Model/MyFeature.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Model/MyPoint.java" />
-      <change type="DELETED" beforePath="E:\cse5522\AI2\bin\graphic\Block$TYPE.class" afterPath="" />
-      <change type="DELETED" beforePath="E:\cse5522\AI2\bin\graphic\Block.class" afterPath="" />
-      <change type="DELETED" beforePath="E:\cse5522\AI2\bin\graphic\Main$1.class" afterPath="" />
-      <change type="DELETED" beforePath="E:\cse5522\AI2\bin\graphic\Main$2.class" afterPath="" />
-      <change type="DELETED" beforePath="E:\cse5522\AI2\bin\graphic\Main.class" afterPath="" />
-      <change type="DELETED" beforePath="E:\cse5522\AI2\bin\graphic\MyLine.class" afterPath="" />
-      <change type="DELETED" beforePath="E:\cse5522\AI2\bin\graphic\MyRect.class" afterPath="" />
-      <change type="DELETED" beforePath="E:\cse5522\AI2\bin\graphic\PaintingPanel.class" afterPath="" />
-      <change type="DELETED" beforePath="E:\cse5522\AI2\bin\parser\Combiner.class" afterPath="" />
-      <change type="DELETED" beforePath="E:\cse5522\AI2\bin\parser\PositionDetector.class" afterPath="" />
-      <change type="DELETED" beforePath="E:\cse5522\AI2\bin\recognizer\Result.class" afterPath="" />
-      <change type="DELETED" beforePath="E:\cse5522\AI2\bin\recognizer\SymbolClassifier.class" afterPath="" />
-    </list>
+    <list default="true" id="c5fb3b78-eb12-4525-82e3-955df4564476" name="Default" comment="" />
     <ignored path="AI2.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/bin/" />
@@ -255,6 +239,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="FullScreen" value="false" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="JUnit" factoryName="JUnit">
@@ -426,8 +411,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="1" width="1364" height="766" extended-state="1" />
-    <editor active="true" />
+    <frame x="1" y="1" width="1364" height="766" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
