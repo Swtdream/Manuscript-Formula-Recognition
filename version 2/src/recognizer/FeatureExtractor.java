@@ -106,6 +106,12 @@ public class FeatureExtractor {
             int k;
             MyPoint tempP = new MyPoint(line.get(0));
             mf.feature.get(i).add(new MyPoint(tempP));
+
+            maxX = (tempP.x>maxX?tempP.x:maxX);
+            minX = (tempP.x<minX?tempP.x:minX);
+            maxY = (tempP.y>maxY?tempP.y:maxY);
+            minY = (tempP.y<minY?tempP.y:minY);
+
             for(k = 1; !distance.isEmpty();) {
 
                 double tempDis = distance.getFirst();
