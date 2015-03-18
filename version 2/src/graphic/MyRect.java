@@ -10,15 +10,18 @@ public class MyRect {
 	private static final Color activeColor = Color.green;
 	private static final Color inactiveColor = Color.red;
 	
-	public List<MyLine> lineList;
+	public List<MyLine> lineList = null;
 
 	public int lx, ly, rx, ry;
 	public int width, height;
 
 	public boolean isActive;
-
+	
+	public String detectedString = null; // symbol show on the top-right corner.
+	
 	public MyRect()
 	{
+		detectedString = new String("");
 		lineList = new ArrayList<MyLine>();
 		lx = ly = Integer.MAX_VALUE;
 		rx = ry = Integer.MIN_VALUE;
@@ -26,6 +29,7 @@ public class MyRect {
 	}
 	
 	public MyRect(MyLine line, boolean ia) {
+		detectedString = new String("");
 		lineList = new ArrayList<MyLine>();
 		lineList.add(line);
 
@@ -74,6 +78,11 @@ public class MyRect {
 		return (Math.abs(cx1 - cx2) < dx && Math.abs(cy1 - cy2) < dy);
 	}
 
+	public void setDetectedString(String res)
+	{
+		this.detectedString = res;
+	}
+	
 	public void drawLines(Graphics2D g2d) {
 		for (MyLine line : this.lineList) {
 			line.draw(g2d);
@@ -89,6 +98,11 @@ public class MyRect {
 		{
 			g2d.setColor(inactiveColor);
 			g2d.drawRect(lx-1, ly-1, width+2, height+2);
+		}
+		if(!detectedString.equals("") && detectedString!=null)
+		{
+			g2d.setColor(Color.BLACK);
+			g2d.drawString(detectedString, rx, ly);
 		}
 	}
 

@@ -2,6 +2,7 @@ package graphic;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
@@ -14,7 +15,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import model.MyFeature;
-import model.MyPoint;
+import model.MySymbol;
 import recognizer.FeatureExtractor;
 
 public class PaintingPanel extends JPanel implements MouseListener,
@@ -37,6 +38,7 @@ public class PaintingPanel extends JPanel implements MouseListener,
 	private final Stroke paintStroke = new BasicStroke(penStrokeWidth);
 	private final Stroke coverStroke = new BasicStroke(rectStrokeWidth);
 	private final Color color = Color.BLACK;
+	private final Font font = new Font("TimesRoman", Font.PLAIN, 15);
 
 	private boolean isDrawing = false;
 
@@ -53,6 +55,7 @@ public class PaintingPanel extends JPanel implements MouseListener,
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setStroke(paintStroke);
+		g2d.setFont(font);
 		g2d.setColor(color);
 
 		for (MyLine line : lines) {
@@ -200,21 +203,36 @@ public class PaintingPanel extends JPanel implements MouseListener,
 		System.out.println(rectangles.get(0).width);
 		FeatureExtractor fe = new FeatureExtractor(rectangles.get(0));
 		MyFeature myFeature = fe.Extract();
+		MySymbol mySymbol = fe.PointToUnit(myFeature);
 		
-		// test
-		MyRect mrect = new MyRect();
-		for( ArrayList<MyPoint> stroke : myFeature.feature)
-		{
-			MyLine mline = new MyLine();
-			for(MyPoint point : stroke)
-			{
-				mline.addPoint((int)(point.x*200)+50, (int)(point.y*200)+50);
-			}
-			mrect.join(mline);
-		}
-		repaint();
 	}
 	
+	public List<MySymbol> generateData(int v)
+	{
+		List<MySymbol> symbols = new ArrayList<MySymbol>();
+		for(MyRect rect : rectangles)
+		{
+			FeatureExtractor fe = new FeatureExtractor(rect);
+			MyFeature mf = fe.Extract();
+			MySymbol myS = fe.PointToUnit(mf);
+			myS.setValue(v);
+			symbols.add(myS);
+		}
+		return symbols;
+	}
 	
-	
+
+	// test
+//	MyRect mrect = new MyRect();
+//	for( ArrayList<MyPoint> stroke : myFeature.feature)
+//	{
+//		MyLine mline = new MyLine();
+//		for(MyPoint point : stroke)
+//		{
+//			mline.addPoint((int)(point.x*200)+50, (int)(point.y*200)+50);
+//		}
+//		mrect.join(mline);
+//	}
+//	rectangles.add(mrect);
+//	repaint();
 }

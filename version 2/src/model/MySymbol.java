@@ -9,9 +9,15 @@ public class MySymbol {
 	
 	private List<MyStroke> strokes;
 	
+    public MySymbol(List<MyStroke> s)
+    {
+        this.value = 0;
+        this.strokes = s;
+    }
+	
 	public MySymbol(int v, List<MyStroke> s)
 	{
-		this.value = v;
+		this.value = 30; // "?"
 		this.strokes = s;
 	}
 

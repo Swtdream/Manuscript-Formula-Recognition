@@ -3,20 +3,29 @@ package graphic;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import model.MySymbol;
+import utils.IOUtils;
 
 public class Main {
 
 	private static PaintingPanel paintPanel = null;
 	private static JTextArea latexArea = null;
 	private static JTextArea messageArea = null;
-
+	private static JTextField numField = null;
+	// get dataset
+	private static List<MySymbol> symbols = new ArrayList<MySymbol>();
+	
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel(UIManager
@@ -57,6 +66,41 @@ public class Main {
 				
 			});
 			
+			JButton addButton = new JButton("addData");
+			addButton.setBounds(215, 5, 100, 30);
+			myFrame.add(addButton);
+			
+			addButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					// TODO Auto-generated method stub
+					int v = Integer.valueOf(numField.getText());
+					symbols.addAll(paintPanel.generateData(v));
+				}
+				
+			});
+			
+			JButton commitButton = new JButton("commit");
+			commitButton.setBounds(320, 5, 100, 30);
+			myFrame.add(commitButton);
+			
+			commitButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					// TODO Auto-generated method stub
+					int numStroke = symbols.get(0).getStrokes().size();
+					int v = Integer.valueOf(numField.getText());
+					IOUtils.objectToJsonFile(v, numStroke, symbols);
+				}
+				
+			});
+			
+			numField = new JTextField();
+			numField.setBounds(425, 5, 200, 30);
+			myFrame.add(numField);
+			
 			paintPanel = new PaintingPanel();
 			paintPanel.setBackground(Color.WHITE);
 			paintPanel.setBounds(5, 40, 985, 300);
@@ -69,30 +113,6 @@ public class Main {
 			JLabel label2 = new JLabel("Latex");
 			label2.setBounds(510, 350, 80, 30);
 			myFrame.add(label2);
-			
-//			JButton andButton = new JButton("∧");
-//			andButton.setBounds(5, 350, 50, 30);
-//			myFrame.add(andButton);
-//
-//			JButton orButton = new JButton("∨");
-//			orButton.setBounds(60, 350, 50, 30);
-//			myFrame.add(orButton);
-//
-//			JButton notButton = new JButton("¬");
-//			notButton.setBounds(115, 350, 50, 30);
-//			myFrame.add(notButton);
-//
-//			JButton lpButton = new JButton("(");
-//			lpButton.setBounds(170, 350, 50, 30);
-//			myFrame.add(lpButton);
-//
-//			JButton rpButton = new JButton(")");
-//			rpButton.setBounds(225, 350, 50, 30);
-//			myFrame.add(rpButton);
-//
-//			JButton implyButton = new JButton("→");
-//			implyButton.setBounds(280, 350, 50, 30);
-//			myFrame.add(implyButton);
 
 			messageArea = new JTextArea();
 			messageArea.setBounds(5, 390, 480, 200);

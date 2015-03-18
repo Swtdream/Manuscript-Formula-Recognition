@@ -4,30 +4,30 @@ import java.util.List;
 
 public class MyStroke {
 
-	private int sx;
-	private int sy;
+	private double sx;
+	private double sy;
 	private List<MyUnit> infos;
 	
-	public MyStroke(int x, int y, List<MyUnit> in)
+	public MyStroke(double x, double y, List<MyUnit> in)
 	{
 		this.sx = x;
 		this.sy = y;
 		this.infos = in;
 	}
 
-	public int getSx() {
+	public double getSx() {
 		return sx;
 	}
 
-	public void setSx(int sx) {
+	public void setSx(double sx) {
 		this.sx = sx;
 	}
 
-	public int getSy() {
+	public double getSy() {
 		return sy;
 	}
 
-	public void setSy(int sy) {
+	public void setSy(double sy) {
 		this.sy = sy;
 	}
 

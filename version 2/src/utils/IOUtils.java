@@ -16,6 +16,7 @@ import com.google.gson.reflect.TypeToken;
 public class IOUtils {
 	
 	private final static String FILENAME = "dataset";
+	private final static String EXTENSION = ".txt";
 	
 	public static List<MySymbol> jsonFileToObject(int numStroke)
 	{
@@ -31,7 +32,16 @@ public class IOUtils {
 	{
 		Gson gson = new Gson();
 		String str = gson.toJson(symbols);
+		System.out.println(str);
 		writeFile(str, FILENAME + numStroke);
+	}
+	
+	public static void objectToJsonFile(int v, int numStroke, List<MySymbol> symbols) 
+	{
+		Gson gson = new Gson();
+		String str = gson.toJson(symbols);
+		System.out.println(str);
+		writeFile(str, FILENAME + numStroke + "_" + v);
 	}
 	
 	public static String readFile(String filename)
@@ -39,7 +49,7 @@ public class IOUtils {
 		String res = "";
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new FileReader(filename));
+			in = new BufferedReader(new FileReader(filename + EXTENSION));
 			String line;
 			while((line = in.readLine())!=null)
 			{
@@ -66,7 +76,7 @@ public class IOUtils {
 	{
 		BufferedWriter out = null;
 		try {
-			out = new BufferedWriter(new FileWriter(filename));
+			out = new BufferedWriter(new FileWriter(filename + EXTENSION));
 			out.write(content);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

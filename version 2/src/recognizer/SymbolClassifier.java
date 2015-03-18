@@ -12,6 +12,16 @@ public class SymbolClassifier {
 	private static List<List<MySymbol>> DATASET = null;
 	private static double MAX_DIS = 1000.0f;
 	
+	public static String[] valueToLatex = new String[]{
+		"\\int", "\\sum", "\\prod", "\\frac", 
+		"\\partial", "d", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "\\right)",
+		"i", "j", "k", "x", "y", "z", "n",
+		"+", "-", "=", "\\infty", "\\left(", 
+		"mixed", "?"
+	};
+	
+	
+	
 	// read data from 4 dataset files in advance.
 	static
 	{
