@@ -36,9 +36,9 @@ public class MyLine {
 		return (rb.x - lt.x > 2) || (rb.y - lt.y > 4);
 	}
 	
-	public MyRect getRectangle()
+	public MyRect getRectangle(long id)
 	{
-		return new MyRect(this, true);
+		return new MyRect(id, this, true);
 	}
 
 	public void draw(Graphics2D g2d) {

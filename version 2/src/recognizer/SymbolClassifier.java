@@ -5,6 +5,7 @@ import java.util.List;
 
 import model.MyStroke;
 import model.MySymbol;
+import utils.IOUtils;
 
 public class SymbolClassifier {
 
@@ -26,10 +27,10 @@ public class SymbolClassifier {
 	static
 	{
 		DATASET = new ArrayList<List<MySymbol>>();
-//		for(int i=1; i<=4; i++)
-//		{
-//			DATASET.add(IOUtils.jsonFileToObject(i));
-//		}
+		for(int i=1; i<=4; i++)
+		{
+			DATASET.add(IOUtils.jsonFileToObject(i));
+		}
 	}
 	
 	public SymbolClassifier()

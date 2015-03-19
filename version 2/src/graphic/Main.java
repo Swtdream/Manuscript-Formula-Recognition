@@ -61,7 +61,7 @@ public class Main {
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
 					//paintPanel.saveImage();
-					paintPanel.recognize();
+					// paintPanel.recognize();
 				}
 				
 			});
@@ -75,8 +75,8 @@ public class Main {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
-					int v = Integer.valueOf(numField.getText());
-					symbols.addAll(paintPanel.generateData(v));
+					// int v = Integer.valueOf(numField.getText());
+					// symbols.addAll(paintPanel.generateData(v));
 				}
 				
 			});
@@ -90,10 +90,11 @@ public class Main {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
-					int numStroke = symbols.get(0).getStrokes().size();
-					int v = Integer.valueOf(numField.getText());
-					IOUtils.objectToJsonFile(v, numStroke, symbols);
-					symbols.clear();
+					// int numStroke = symbols.get(0).getStrokes().size();
+					// int v = Integer.valueOf(numField.getText());
+					// IOUtils.objectToJsonFile(v, numStroke, symbols);
+					// symbols.clear();
+					paintPanel.recoAndParse();
 				}
 				
 			});

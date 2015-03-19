@@ -4,19 +4,13 @@ package recognizer;
  * Created by yingshuo chen on 2015/3/16.
  */
 
-import graphic.MyLine;
-import graphic.MyRect;
+import model.*;
+import graphic.*;
+import utils.MathUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import model.MyFeature;
-import model.MyPoint;
-import model.MyStroke;
-import model.MySymbol;
-import model.MyUnit;
-import utils.MathUtils;
 
 public class FeatureExtractor {
 
@@ -85,7 +79,7 @@ public class FeatureExtractor {
 
     private void Interpolate(MyFeature mf) {
 
-        double minX = 32767, minY = 32768, maxX = 0, maxY = 0;
+        double minX = 32768, minY = 32768, maxX = 0, maxY = 0;
 
         for(int i = 0; i < noOfLines; i ++) {
 
@@ -111,7 +105,7 @@ public class FeatureExtractor {
             minX = (tempP.x<minX?tempP.x:minX);
             maxY = (tempP.y>maxY?tempP.y:maxY);
             minY = (tempP.y<minY?tempP.y:minY);
-
+            
             for(k = 1; !distance.isEmpty();) {
 
                 double tempDis = distance.getFirst();

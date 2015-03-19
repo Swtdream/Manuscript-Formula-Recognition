@@ -16,15 +16,16 @@ import javax.swing.JPanel;
 
 import model.MyFeature;
 import model.MySymbol;
+import parser.PositionDetector;
 import recognizer.FeatureExtractor;
+import recognizer.SymbolClassifier;
 
 public class PaintingPanel extends JPanel implements MouseListener,
 		MouseMotionListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+
+	private static long rectID = 0;
 
 	private List<MyLine> lines;
 	private List<MyRect> rectangles;
@@ -33,20 +34,26 @@ public class PaintingPanel extends JPanel implements MouseListener,
 
 	private final static int penStrokeWidth = 2;
 	private final static int rectStrokeWidth = 1;
-	// private final int imageSize = 28;
 
 	private final Stroke paintStroke = new BasicStroke(penStrokeWidth);
 	private final Stroke coverStroke = new BasicStroke(rectStrokeWidth);
 	private final Color color = Color.BLACK;
 	private final Font font = new Font("TimesRoman", Font.PLAIN, 15);
 
+	private SymbolClassifier myClassifier = null;
+	private PositionDetector myDetector = null;
+	
 	private boolean isDrawing = false;
+	private boolean isParsing = false;
 
 	public PaintingPanel() {
 
 		lines = new ArrayList<MyLine>();
 		rectangles = new ArrayList<MyRect>();
 
+		myClassifier = new SymbolClassifier();
+		myDetector = new PositionDetector();
+		
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
@@ -116,19 +123,25 @@ public class PaintingPanel extends JPanel implements MouseListener,
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		int button = arg0.getButton();
-		if (button == MouseEvent.BUTTON1) {
-			currentLine = new MyLine();
-			int x = arg0.getX();
-			int y = arg0.getY();
-			currentLine.addPoint(x, y);
-			lines.add(currentLine);
-			isDrawing = true;
-		} else if (button == MouseEvent.BUTTON3) {
-			int size = rectangles.size();
-			if (size > 0) {
-				rectangles.get(size - 1).isActive = false;
-				repaint();
+		if (!isParsing) {
+			int button = arg0.getButton();
+			if (button == MouseEvent.BUTTON1) {
+				currentLine = new MyLine();
+				int x = arg0.getX();
+				int y = arg0.getY();
+				currentLine.addPoint(x, y);
+				lines.add(currentLine);
+				isDrawing = true;
+			} else if (button == MouseEvent.BUTTON3) {
+				int size = rectangles.size() - 1;
+				if (size >= 0) {
+					MyRect gRect = rectangles.get(size);
+					if (gRect.isActive) {
+						gRect.isActive = false;
+						recognize(gRect.getID(), size);
+						repaint();
+					}
+				}
 			}
 		}
 	}
@@ -139,15 +152,17 @@ public class PaintingPanel extends JPanel implements MouseListener,
 		if (isDrawing) {
 			isDrawing = false;
 			if (currentLine.drawable()) {
-				MyRect r1 = currentLine.getRectangle();
+				MyRect r1 = currentLine.getRectangle(rectID++);
 				if (rectangles.size() == 0)
 					rectangles.add(r1);
 				else {
-					MyRect r2 = rectangles.get(rectangles.size() - 1);
-					if (r2.isActive && r2.isTouched(r1)) {
+					int l = rectangles.size() - 1;
+					MyRect r2 = rectangles.get(l);
+					if (r2.isActive && r2.isTouching(r1)) {
 						r2.join(r1);
 					} else {
 						r2.isActive = false;
+						recognize(r2.getID(), l);
 						rectangles.add(r1);
 					}
 				}
@@ -157,82 +172,95 @@ public class PaintingPanel extends JPanel implements MouseListener,
 		}
 	}
 
-	// public void saveImage()
-	// {
-	// if(rectangles.size() == 0) return;
-	// for(int i=0; i<rectangles.size(); i++)
-	// {
-	// Rectangle r = rectangles.get(i);
-	// BufferedImage img = new BufferedImage(r.width+penStrokeWidth,
-	// r.height+penStrokeWidth, BufferedImage.TYPE_INT_RGB);
-	// Graphics2D g2d = img.createGraphics();
-	// g2d.translate(-r.x+penStrokeWidth/2, -r.y+penStrokeWidth/2);
-	// this.printAll(g2d);
-	// BufferedImage img2 = new BufferedImage(imageSize, imageSize,
-	// BufferedImage.TYPE_INT_RGB);
-	// Graphics2D g2d2 = img2.createGraphics();
-	// g2d2.drawImage(img, 0, 0, imageSize, imageSize, null);
-	//
-	// /*for(int i=0; i< imageSize; i++)
-	// {
-	// for(int j=0; j< imageSize; j++)
-	// {
-	// Color c = new Color(img2.getRGB(j, i));
-	// if(c.getBlue()==0)
-	// System.out.print(1);
-	// else System.out.print(0);
-	// }
-	// System.out.println();
-	// }*/
-	//
-	// try {
-	// ImageIO.write(img2, "BMP", new File(i + ".bmp"));
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } finally
-	// {
-	// g2d.dispose();
-	// g2d2.dispose();
-	// }
-	// }
-	// }
+	public void recognize(long id, int index) {
+		Thread thread = new Thread(new RecognizeRunnable(id, index));
+		thread.start();
+	}
 
-	public void recognize()
+	public void recoAndParse() {
+		// Pause the drawing function.
+		isParsing = true;
+		for(int i=0; i<rectangles.size(); i++)
+		{
+			MyRect rect = rectangles.get(i);
+			if(rect.isActive)
+			{
+				recognize(rect.getID(), i);
+			}
+		}
+		Thread thread = new Thread(new ParserRunnable());	
+		thread.start();
+	}
+
+	private class ParserRunnable implements Runnable
 	{
-		System.out.println(rectangles.get(0).width);
-		FeatureExtractor fe = new FeatureExtractor(rectangles.get(0));
-		MyFeature myFeature = fe.Extract();
-		MySymbol mySymbol = fe.PointToUnit(myFeature);
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			while(!isAllRecognized())
+			{
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			myDetector.setBlocks(rectangles);
+			String res = myDetector.getResult();
+			System.out.println(res);
+			PaintingPanel.this.isParsing = false;
+		}
+		
+		private boolean isAllRecognized()
+		{
+			for(MyRect rect : rectangles)
+			{
+				if(rect.getValue() == -1)
+					return false;
+			}
+			return true;
+		}
 		
 	}
 	
-	public List<MySymbol> generateData(int v)
-	{
-		List<MySymbol> symbols = new ArrayList<MySymbol>();
-		for(MyRect rect : rectangles)
-		{
-			FeatureExtractor fe = new FeatureExtractor(rect);
-			MyFeature mf = fe.Extract();
-			MySymbol myS = fe.PointToUnit(mf);
-			myS.setValue(v);
-			symbols.add(myS);
-		}
-		return symbols;
-	}
 	
+	private class RecognizeRunnable implements Runnable {
+		private long goalID;
+		private int goalIndex;
 
-	// test
-//	MyRect mrect = new MyRect();
-//	for( ArrayList<MyPoint> stroke : myFeature.feature)
-//	{
-//		MyLine mline = new MyLine();
-//		for(MyPoint point : stroke)
-//		{
-//			mline.addPoint((int)(point.x*200)+50, (int)(point.y*200)+50);
-//		}
-//		mrect.join(mline);
-//	}
-//	rectangles.add(mrect);
-//	repaint();
+		public RecognizeRunnable(long id, int index) {
+			goalID = id;
+			goalIndex = index;
+		}
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			MyRect rect = rectangles.get(goalIndex);
+			FeatureExtractor fe = new FeatureExtractor(rect);
+			MyFeature myFeature = fe.Extract();
+			MySymbol mySymbol = fe.PointToUnit(myFeature);
+			int value = myClassifier.classify(mySymbol.getStrokes());
+			if (rectangles.size() > goalIndex) {
+				MyRect gRect = rectangles.get(goalIndex);
+				if (gRect.isMe(goalID)) {
+					gRect.setValue(value);
+					gRect.setLatex(SymbolClassifier.valueToLatex[value]);
+					repaint();
+				}
+			}
+		}
+
+	}
+
+	/*
+	 * public List<MySymbol> generateData(int v) { List<MySymbol> symbols = new
+	 * ArrayList<MySymbol>(); for(MyRect rect : rectangles) { FeatureExtractor
+	 * fe = new FeatureExtractor(rect); MyFeature mf = fe.Extract(); MySymbol
+	 * myS = fe.PointToUnit(mf); myS.setValue(v); symbols.add(myS); } return
+	 * symbols; }
+	 */
+
 }

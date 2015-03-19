@@ -7,6 +7,8 @@ import java.util.List;
 
 public class MyRect {
 
+	private long ID;
+
 	private static final Color activeColor = Color.green;
 	private static final Color inactiveColor = Color.red;
 	
@@ -17,19 +19,23 @@ public class MyRect {
 
 	public boolean isActive;
 	
-	public String detectedString = null; // symbol show on the top-right corner.
+	private int value = -1;
+
+	private String latex = null; // symbol show on the top-right corner.
 	
-	public MyRect()
+	public MyRect(long id)
 	{
-		detectedString = new String("");
+		ID = id;
+		latex = new String("");
 		lineList = new ArrayList<MyLine>();
 		lx = ly = Integer.MAX_VALUE;
 		rx = ry = Integer.MIN_VALUE;
 		this.isActive = true;
 	}
 	
-	public MyRect(MyLine line, boolean ia) {
-		detectedString = new String("");
+	public MyRect(long id, MyLine line, boolean ia) {
+		ID = id;
+		latex = new String("");
 		lineList = new ArrayList<MyLine>();
 		lineList.add(line);
 
@@ -45,6 +51,11 @@ public class MyRect {
 		this.isActive = ia;
 	}
 
+	public boolean isMe(long aid)
+	{
+		return (this.ID == aid);
+	}
+	
 	public void join(MyRect another) {
 		for (MyLine line : another.lineList) {
 			this.lineList.add(line);
@@ -68,20 +79,38 @@ public class MyRect {
 		height = ry - ly;
 	}
 
-	public boolean isTouched(MyRect another) {
+	public boolean isTouching(MyRect another) {
 		int cx1 = this.lx + this.rx;
 		int cy1 = this.ly + this.ry;
 		int cx2 = another.lx + another.rx;
 		int cy2 = another.ly + another.ry;
 		int dx = this.width + another.width + 20;
-		int dy = this.height + another.height + 20;
+		int dy = this.height + another.height + 30;
 		return (Math.abs(cx1 - cx2) < dx && Math.abs(cy1 - cy2) < dy);
 	}
 
-	public void setDetectedString(String res)
-	{
-		this.detectedString = res;
+	public long getID() {
+		return ID;
 	}
+	
+	public void setLatex(String res)
+	{
+		this.latex = res;
+	}
+	
+	public String getLatex()
+	{
+		return this.latex;
+	}
+	
+	public int getValue() {
+		return value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
+	}
+	
 	
 	public void drawLines(Graphics2D g2d) {
 		for (MyLine line : this.lineList) {
@@ -92,17 +121,17 @@ public class MyRect {
 	public void drawRect(Graphics2D g2d) {
 		if (this.isActive) {
 			g2d.setColor(activeColor);
-			g2d.drawRect(lx-10, ly-10, width+20, height+20);
+			g2d.drawRect(lx-10, ly-15, width+20, height+30);
 		}
 		else
 		{
 			g2d.setColor(inactiveColor);
 			g2d.drawRect(lx-1, ly-1, width+2, height+2);
 		}
-		if(!detectedString.equals("") && detectedString!=null)
+		if(!latex.equals("") && latex!=null)
 		{
 			g2d.setColor(Color.BLACK);
-			g2d.drawString(detectedString, rx, ly);
+			g2d.drawString(latex, rx, ly);
 		}
 	}
 

@@ -29,11 +29,12 @@ public class MathUtils {
 		return dx;
 	}
 	
-	public static double getDistance(double x1, double y1, double x2, double y2)
+	public static double getDistance(double t1, double l1, double t2, double l2)
 	{
-		double dx = x2 - x1;
-		double dy = y2 - y1;
-		return Math.sqrt(dx * dx + dy * dy);
+		double dt = Math.abs(t2 - t1)/(2*Math.PI);
+		dt = Math.min(dt, Math.abs(dt - 1));
+		double dl = l2 - l1;
+		return Math.sqrt(dt * dt + dl * dl);
 	}
 
     public static double getDistance(MyPoint p, MyPoint q)
