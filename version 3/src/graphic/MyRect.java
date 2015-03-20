@@ -1,8 +1,5 @@
 package graphic;
 
-import parser.Combiner;
-import parser.PositionDetector;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -140,16 +137,15 @@ public class MyRect implements Comparable<MyRect>{
 
     @Override
     public int compareTo(MyRect o) {
-
-        if(PositionDetector.isContainedBy(this, o)) {
+        if(this.lx>o.lx) {
             return 1;
-        } else if(PositionDetector.isContainedBy(o, this)) {
+        } else if(this.lx<o.lx) {
             return -1;
         } else {
-            if(PositionDetector.isLeft(this, o)) {
-                return -1;
-            } else {
+            if(this.ly>o.ry) {
                 return 1;
+            } else {
+                return -1;
             }
         }
     }
